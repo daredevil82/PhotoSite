@@ -8,8 +8,6 @@ from photosite.settings.local import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ALLOWED_HOSTS = []
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,9 +16,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'rest_framework',
     'rest_framework_docs',
-    'photosite'
+    'storages',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -87,6 +87,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'app.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -127,4 +128,7 @@ REST_FRAMEWORK = {
 JWT_AUTH =  {
     'JWT_EXPIRATION_DELTA': timedelta(days = 14)
 }
+
+# Use S3 as default user-uploaded media storage
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
