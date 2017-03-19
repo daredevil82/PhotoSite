@@ -1,0 +1,1 @@
+from photosite.settings.settings import *

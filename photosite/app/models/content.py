@@ -10,7 +10,7 @@ class UploadItem(models.Model):
     processed = models.BooleanField(default = False)
     alerted = models.BooleanField(default = False)
     retrieved = models.BooleanField(default = False)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add = True)
     company = models.ForeignKey(Company)
 
     class Meta:
@@ -56,7 +56,7 @@ class Image(models.Model):
 
         file_name = os.path.split('/', 1)[1]
 
-        suf = SimpleUploadedFile(file_name, temp_handle.read(), content = CONTENT_TYPE[0])
+        suf = SimpleUploadedFile(file_name, temp_handle.read(), CONTENT_TYPE[0])
         self.thumb.save(file_name, suf, save = False)
 
 

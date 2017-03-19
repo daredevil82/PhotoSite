@@ -144,4 +144,6 @@ MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'photosite.settings.custom_storages.MediaStorage'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 
+EXTRACT_PATH = os.path.join(os.path.expanduser('~'), 'extracts')
+
 

@@ -7,6 +7,8 @@ import mimetypes
 from django.core.files import File
 from rest_framework.test import APITestCase
 
+from app.models import Company
+from app.models import User
 from photosite.settings.custom_storages import MediaStorage
 
 from app.models.content import Image
@@ -14,6 +16,17 @@ from app.models.content import Image
 class ImageTestCase(APITestCase):
     def setUp(self):
         self.path = os.path.join(os.path.expanduser('~'), 'project/action_me.jpg')
+        self.username = "admin"
+        self.email = "test@admin.com"
+        self.password = "default123"
+        self.admin = User.objects.create_superuser(username = self.username,
+                                                   password = self.password,
+                                                   email = self.email)
+
+        self.company, created = Company.objects.get_or_create(name = 'test')
+
+        self.admin.company = self.company
+        self.admin.save()
 
     def test_s3_put(self):
         f = File(open(self.path, 'rb'), name = "action_me.jpg")
@@ -28,11 +41,12 @@ class ImageTestCase(APITestCase):
         test_image.full_size.delete()
 
     def test_s3_get(self):
+
         response = self.client.post('/upload', {
-            'resource': '	https://s3.us-east-2.amazonaws.com/jasonjohns-photosite-ev/media/archives/test.zip',
+            'resource': 'https://s3.us-east-2.amazonaws.com/jasonjohns-photosite-ev/media/archives/test.zip',
             'password': 'default123',
             'event': 'basketball',
-            'client': 'usm'
+            'client': 'test'
         })
 
         self.assertEquals(201, response.status_code)
