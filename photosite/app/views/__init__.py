@@ -9,6 +9,5 @@ class AbstractView(views.APIView):
     def __init__(self):
         self.log = logging.getLogger('django')
 
-    @property
     def error_response(self, msg, status = status.HTTP_404_NOT_FOUND):
         return Response({'msg': msg}, status)

@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 
+from rest_framework import status
 from rest_framework.decorators import permission_classes
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from app.permissions import IsAdministrator
@@ -20,7 +22,14 @@ class CompanyListView(AbstractView):
 
     # TODO: implement way for administrator to create a new Company record
     def post(self, request):
-        pass
+        data = request.data
+        serializer = CompanySerializer(data = data)
+        try:
+            serializer.is_valid(True)
+
+        except ValidationError as e:
+            self.log.error('Error creating new Company record [{}]'.format(e))
+            return self.error_response('Error creating new company record, check fields', status = status.HTTP_400_BAD_REQUEST)
 
 
 @permission_classes((IsAdministrator, ))

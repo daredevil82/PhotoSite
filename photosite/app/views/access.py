@@ -33,6 +33,17 @@ class RegistrationView(AbstractView):
     def __init__(self):
         super().__init__()
 
+    def post(self, request):
+        data = request.data
+        serializer = UserSerializer(data = data)
+        if serializer.is_valid():
+            serializer.save()
+            data = serializer.data
+            # data.pop('confirm_password')
+            # data.pop('password')
+            return Response(data, status = status.HTTP_201_CREATED)
+        else:
+            return self.error_response("Error creating account [{}]".format(serializer.error_messages))
 
 
 
@@ -66,7 +77,7 @@ class LoginView(AbstractView):
 
         if user.is_active:
             user.generate_token()
-            serializer = UserSerializer(user)
+            serializer = UserSerializer(user).data
             return Response(serializer)
 
         else:

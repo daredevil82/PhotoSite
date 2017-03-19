@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^company/(?P<company_id>[0-9]+)$', CompanyDetailView.as_view(), name = 'Company Detail View'),
     url(r'^user$', UserListView.as_view(), name = 'User List View'),
     url(r'^user/(?P<user_id>[0-9]+)$', UserDetailView.as_view(), name = 'User Detail View')
+    # url(r'^item$')
 ]

@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
 
     def generate_token(self):
-        self.token = UserManager.generate_token(self)
+        self.token = User.objects.generate_token(user = self)
         self.save()
 
     @python_2_unicode_compatible

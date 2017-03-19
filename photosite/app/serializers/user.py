@@ -6,6 +6,10 @@ from rest_framework.serializers import ModelSerializer, CharField
 from app.models.user import User, Company
 
 class CompanySerializer(ModelSerializer):
+
+    def create(self, validated_data):
+        return Company(**validated_data)
+
     class Meta:
         model = Company
         fields = '__all__'
