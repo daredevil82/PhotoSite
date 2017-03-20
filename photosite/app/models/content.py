@@ -22,11 +22,15 @@ class UploadItem(models.Model):
 
 
 class Image(models.Model):
-    full_size = models.ImageField(upload_to = "images/fullsize", default = '')
-    thumb = models.ImageField(upload_to = "images/thumbs", default = '')
+    full_size = models.ImageField(upload_to = "images/fullsize", default = '', width_field = 'full_width', height_field = 'full_height')
+    full_width = models.IntegerField(default = 0)
+    full_height = models.IntegerField(default = 0)
+
+    thumb = models.ImageField(upload_to = "images/thumbs", default = '', width_field = 'thumb_width', height_field = 'thumb_height')
+    thumb_width = models.IntegerField(default = 0)
+    thumb_height = models.IntegerField(default = 0)
 
     def generate_thumbnail(self):
-        # TODO move to defined Celery task
         if not self.full_size:
             return
 

@@ -16,6 +16,7 @@ from photosite.settings import EXTRACT_PATH
 
 from app.models.user import Company, User
 from app.models.content import Image, UploadItem
+from app.tasks.image import ArchiveRetrievalTask
 from app.views import AbstractView
 
 class UploadItemView(AbstractView):
@@ -23,31 +24,7 @@ class UploadItemView(AbstractView):
         super().__init__()
 
     def extract_images(self, archive_url):
-        self.log.info('Retrieving and extracting images from [{}]'.format(archive_url))
-        try:
-            req = requests.get(archive_url, stream = True)
-            if req.status_code < 400:
-                zip = ZipFile(BytesIO(req.content))
-                item_count = 0
-
-                if not os.path.exists(EXTRACT_PATH):
-                    os.makedirs(EXTRACT_PATH)
-
-                for item in zip.namelist():
-                    if item.startswith('edits'):
-                        item_count+= 1
-                        zip.extract(item, EXTRACT_PATH)
-
-                req.close()
-                self.log.info('[{}] items extracted to [{}]'.format(item_count, EXTRACT_PATH))
-                return True
-
-            else:
-                req.close()
-                raise requests.RequestException('Request status code: [{}]'.format(req.status_code))
-        except requests.RequestException as e:
-            self.log.error('Error retrieving URL [{}].  Message: [{}]'.format(archive_url, e))
-            raise requests.RequestException(e)
+        pass
 
     def is_admin(self, password):
         try:
@@ -60,8 +37,6 @@ class UploadItemView(AbstractView):
         except User.DoesNotExist:
             self.log.error('Administrator account \'admin\' does not exist')
             return False
-
-
 
     def post(self, request):
         data = request.data
@@ -76,7 +51,10 @@ class UploadItemView(AbstractView):
 
                     item.company = client
                     item.save()
-                    self.extract_images(data['resource'])
+
+                    archive_retrieval_task = ArchiveRetrievalTask()
+                    archive_retrieval_task.run(item.url)
+
                     return Response(status= status.HTTP_201_CREATED)
 
 

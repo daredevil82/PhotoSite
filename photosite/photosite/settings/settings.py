@@ -5,6 +5,7 @@ from datetime import timedelta
 
 from photosite.settings.logging import LOGGING
 from photosite.settings.local import *
+from photosite.settings.celery_settings import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
