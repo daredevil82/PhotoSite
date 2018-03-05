@@ -183,3 +183,6 @@ ENV/
 .ropeproject
 ### Vagrant template
 .vagrant/
+
+# Ignore local project settings file
+/photosite/photosite/local.py

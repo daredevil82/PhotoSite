@@ -32,7 +32,10 @@ echo "Setting MySQL root password"
 debconf-set-selections <<< "mysql-server mysql-server/root_password password $DB_PASS"
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password $DB_PASS"
 
-# Add Redis and python 3.6 PPA
+# need in order to add apt-add-repository command
+apt-get install -y software-properties-common python3-software-properties
+
+# Add Ubuntu toolchain, Redis and python 3.6 PPA
 add-apt-repository ppa:chris-lea/redis-server -y
 add-apt-repository ppa:jonathonf/python-3.6
 
@@ -48,8 +51,8 @@ echo "Installing required dependencies for project"
 apt-get install -y python3-dev autotools-dev blt-dev bzip2 dpkg-dev g++-multilib gcc-multilib libbluetooth-dev libbz2-dev libffi-dev \
     libffi6 libffi6-dbg libgdbm-dev libgpm2 libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev libtinfo-dev \
     mime-support net-tools python3-crypto python3-mox3 python-ply quilt tk-dev zlib1g zlib1g-dev build-essential libxml2 \
-    libxml2-dev libxslt1.1 libxslt1-dev mysql-server-5.6 libmysqlclient-dev rabbitmq-server redis-server python3.6 python3-pip \
-    nodejs
+    libxml2-dev libxslt1.1 libxslt1-dev mysql-server-5.7 libmysqlclient-dev rabbitmq-server redis-server python3.6 python3-pip \
+    python3.6-dev nodejs
 apt-get autoremove -y
 
 
